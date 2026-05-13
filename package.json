@@ -1,0 +1,48 @@
+{
+  "name": "ckeditor5-a11yfirst",
+  "version": "0.1.0",
+  "description": "Accessibility-first audit plugin for CKEditor 5, upgrading CKEditor 4 a11y plugins.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "test",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "SUBMISSION.md"
+  ],
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor5-plugin",
+    "accessibility",
+    "a11y",
+    "a11yheading",
+    "a11ystylescombo",
+    "a11ylink",
+    "a11yimage"
+  ],
+  "author": "A11y First Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgifford/A11yFirst-CKEditor5-Plugin.git"
+  },
+  "homepage": "https://github.com/mgifford/A11yFirst-CKEditor5-Plugin",
+  "bugs": {
+    "url": "https://github.com/mgifford/A11yFirst-CKEditor5-Plugin/issues"
+  },
+  "peerDependencies": {
+    "ckeditor5": ">=42 <50"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
