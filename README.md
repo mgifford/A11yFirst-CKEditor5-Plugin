@@ -151,6 +151,28 @@ ClassicEditor.create(document.querySelector('#editor'), {
 
 This modular approach is the closest CKEditor 5 equivalent to how CKEditor 4 had separate plugins for different A11yFirst functionality.
 
+## Demo-to-package feature matrix
+
+Use this matrix to understand what from the migration demo belongs in this package versus what should live in optional add-ons.
+
+| Demo feature area | Package core (this repo) | Optional companion plugin | Demo-only implementation |
+|---|---|---|---|
+| Heading checks (`a11yheading`) | Yes (`A11yHeadingPlugin`, `a11yHeadingAudit`) | Optional UI plugin for heading guidance panel | No |
+| Styles checks (`a11ystylescombo`) | Yes (`A11yStylesComboPlugin`, `a11yStylesComboAudit`) | Optional ruleset plugin for editorial style policies | No |
+| Link checks (`a11ylink`) | Yes (`A11yLinkPlugin`, `a11yLinkAudit`) | Optional link-properties workflow plugin | Rich modal/context-menu UX is demo-specific |
+| Image checks (`a11yimage`) | Yes (`A11yImagePlugin`, `a11yImageAudit`) | Optional image-properties workflow plugin | Rich modal/context-menu UX is demo-specific |
+| Unified audit run | Yes (`A11yFirstPlugin`, `a11yFirstAudit`) | Optional dashboard plugin to render report results | No |
+| Audit event integration | Yes (`a11yFirst:report`) | Optional adapter plugins (analytics, CI, moderation) | No |
+| Accessibility overlays (Sa11y, axe) | No | Yes, as separate integration package(s) | Demo includes opt-in wiring |
+| Multi-mode demo pages (strict/image/link/style/list/table/checker) | No | Optional example app(s) | Yes |
+| Custom toolbar widgets outside standard CKEditor UI components | No | Yes, if published as separate CKEditor plugins | Yes in current demo page |
+
+### Recommended packaging strategy
+
+- Keep this package focused on reusable commands, category checks, and event payload contracts.
+- Move advanced modal/context-menu workflows into companion plugins if they need independent release cycles.
+- Keep external runtime integrations (Sa11y, axe, custom checkers) outside the core package unless they become hard dependencies.
+
 ## Report event
 
 The plugin emits `a11yFirst:report` with:
