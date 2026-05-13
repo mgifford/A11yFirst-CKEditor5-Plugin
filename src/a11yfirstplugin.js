@@ -29,6 +29,46 @@ export class ScopedA11yAuditCommand extends Command {
     }
 }
 
+export class A11yHeadingPlugin extends Plugin {
+    static get pluginName() {
+        return 'A11yHeadingPlugin';
+    }
+
+    init() {
+        this.editor.commands.add('a11yHeadingAudit', new ScopedA11yAuditCommand(this.editor, ['heading']));
+    }
+}
+
+export class A11yStylesComboPlugin extends Plugin {
+    static get pluginName() {
+        return 'A11yStylesComboPlugin';
+    }
+
+    init() {
+        this.editor.commands.add('a11yStylesComboAudit', new ScopedA11yAuditCommand(this.editor, ['stylescombo']));
+    }
+}
+
+export class A11yLinkPlugin extends Plugin {
+    static get pluginName() {
+        return 'A11yLinkPlugin';
+    }
+
+    init() {
+        this.editor.commands.add('a11yLinkAudit', new ScopedA11yAuditCommand(this.editor, ['link']));
+    }
+}
+
+export class A11yImagePlugin extends Plugin {
+    static get pluginName() {
+        return 'A11yImagePlugin';
+    }
+
+    init() {
+        this.editor.commands.add('a11yImageAudit', new ScopedA11yAuditCommand(this.editor, ['image']));
+    }
+}
+
 /**
  * Minimal CKEditor 5 proof-of-concept plugin.
  *
@@ -38,6 +78,15 @@ export class ScopedA11yAuditCommand extends Command {
  * - event with results: a11yFirst:report
  */
 export default class A11yFirstPlugin extends Plugin {
+    static get requires() {
+        return [
+            A11yHeadingPlugin,
+            A11yStylesComboPlugin,
+            A11yLinkPlugin,
+            A11yImagePlugin
+        ];
+    }
+
     static get pluginName() {
         return 'A11yFirstPlugin';
     }
@@ -46,10 +95,6 @@ export default class A11yFirstPlugin extends Plugin {
         const editor = this.editor;
 
         editor.commands.add('a11yFirstAudit', new A11yFirstAuditCommand(editor));
-        editor.commands.add('a11yHeadingAudit', new ScopedA11yAuditCommand(editor, ['heading']));
-        editor.commands.add('a11yStylesComboAudit', new ScopedA11yAuditCommand(editor, ['stylescombo']));
-        editor.commands.add('a11yLinkAudit', new ScopedA11yAuditCommand(editor, ['link']));
-        editor.commands.add('a11yImageAudit', new ScopedA11yAuditCommand(editor, ['image']));
 
         editor.ui.componentFactory.add('a11yFirstAudit', locale => {
             const command = editor.commands.get('a11yFirstAudit');

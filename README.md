@@ -27,6 +27,59 @@ No demo site is included.
 npm install ckeditor5-a11yfirst
 ```
 
+## Built-in tests
+
+This repository includes minimal automated tests in `test/audit.test.js` using Node's built-in test runner.
+
+Covered now:
+
+- Full audit execution returns a structured report payload.
+- `a11yFirst:report` event is emitted.
+- Category-scoped audits return only relevant findings.
+
+Run tests:
+
+```bash
+npm test
+```
+
+## Install into CKEditor 5
+
+### 1. Install package
+
+```bash
+npm install ckeditor5-a11yfirst
+```
+
+### 2. Add plugin to your editor config
+
+Use the all-in-one plugin:
+
+```js
+import { ClassicEditor } from 'ckeditor5';
+import { A11yFirstPlugin } from 'ckeditor5-a11yfirst';
+
+ClassicEditor.create(document.querySelector('#editor'), {
+    plugins: [
+        // ...other plugins
+        A11yFirstPlugin
+    ],
+    toolbar: [
+        // ...other items
+        'a11yFirstAudit'
+    ]
+});
+```
+
+### 3. Handle audit results in your app
+
+```js
+editor.on('a11yFirst:report', (evt, data) => {
+    // send to your UI, logs, or moderation workflow
+    console.log(data);
+});
+```
+
 ## Usage
 
 ```js
@@ -58,6 +111,45 @@ ClassicEditor
 - `a11yStylesComboAudit` runs style-related checks
 - `a11yLinkAudit` runs link checks
 - `a11yImageAudit` runs image checks
+
+## CKEditor 4 split plugins in CKEditor 5
+
+In CKEditor 5, you can choose either architecture:
+
+- One umbrella plugin (recommended for submission simplicity): `A11yFirstPlugin`
+- Multiple feature plugins (recommended for modular adoption):
+  - `A11yHeadingPlugin`
+  - `A11yStylesComboPlugin`
+  - `A11yLinkPlugin`
+  - `A11yImagePlugin`
+
+### Option A: single umbrella plugin
+
+Use `A11yFirstPlugin` to get all feature commands plus a unified toolbar button.
+
+### Option B: modular feature plugins
+
+```js
+import { ClassicEditor } from 'ckeditor5';
+import {
+    A11yHeadingPlugin,
+    A11yStylesComboPlugin,
+    A11yLinkPlugin,
+    A11yImagePlugin
+} from 'ckeditor5-a11yfirst';
+
+ClassicEditor.create(document.querySelector('#editor'), {
+    plugins: [
+        // ...other plugins
+        A11yHeadingPlugin,
+        A11yStylesComboPlugin,
+        A11yLinkPlugin,
+        A11yImagePlugin
+    ]
+});
+```
+
+This modular approach is the closest CKEditor 5 equivalent to how CKEditor 4 had separate plugins for different A11yFirst functionality.
 
 ## Report event
 
