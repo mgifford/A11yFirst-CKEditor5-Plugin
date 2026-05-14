@@ -13,11 +13,23 @@ This package maps CKEditor 4 plugin areas to CKEditor 5 audit categories:
 
 ## What is included for submission
 
-- Source plugin code in `src/`
-- Package metadata in `package.json`
-- Change history in `CHANGELOG.md`
-- License in `LICENSE`
-- Installation and integration documentation in this file
+Source layout:
+
+```
+src/
+  audit.js            # Shared audit logic and issue collectors
+  commands.js         # A11yFirstAuditCommand, ScopedA11yAuditCommand
+  a11yheading.js      # A11yHeadingPlugin     (replaces CKEditor 4: a11yheading)
+  a11ystylescombo.js  # A11yStylesComboPlugin (replaces CKEditor 4: a11ystylescombo)
+  a11ylink.js         # A11yLinkPlugin        (replaces CKEditor 4: a11ylink)
+  a11yimage.js        # A11yImagePlugin       (replaces CKEditor 4: a11yimage)
+  a11yfirstplugin.js  # A11yFirstPlugin umbrella (requires all four above)
+  index.js            # Package entry — exports everything
+test/
+  audit.test.js       # Automated tests
+```
+
+Other files: `package.json`, `CHANGELOG.md`, `LICENSE`, `SUBMISSION.md`.
 
 No demo site is included.
 
@@ -45,63 +57,89 @@ npm test
 
 ## Install into CKEditor 5
 
-### 1. Install package
+### Step 1 — Install CKEditor 5 (if not already installed)
+
+```bash
+npm install ckeditor5
+```
+
+See the [CKEditor 5 installation guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/quick-start.html) for framework-specific setup (React, Vue, Angular, plain JS).
+
+### Step 2 — Install this plugin
 
 ```bash
 npm install ckeditor5-a11yfirst
 ```
 
-### 2. Add plugin to your editor config
+### Step 3 — Add the plugin to your editor config
 
-Use the all-in-one plugin:
+**Option A — All-in-one umbrella plugin** (recommended for most integrations)
+
+Registers all four feature checks plus the `a11yFirstAudit` toolbar button.
 
 ```js
 import { ClassicEditor } from 'ckeditor5';
 import { A11yFirstPlugin } from 'ckeditor5-a11yfirst';
 
-ClassicEditor.create(document.querySelector('#editor'), {
+const editor = await ClassicEditor.create(document.querySelector('#editor'), {
     plugins: [
-        // ...other plugins
+        // ...other CKEditor 5 plugins
         A11yFirstPlugin
     ],
     toolbar: [
-        // ...other items
-        'a11yFirstAudit'
+        'heading', '|', 'bold', 'italic', 'link',
+        '|', 'a11yFirstAudit'
     ]
 });
 ```
 
-### 3. Handle audit results in your app
-
-```js
-editor.on('a11yFirst:report', (evt, data) => {
-    // send to your UI, logs, or moderation workflow
-    console.log(data);
-});
-```
-
-## Usage
+**Option B — Individual feature plugins** (pick only what you need)
 
 ```js
 import { ClassicEditor } from 'ckeditor5';
-import { A11yFirstPlugin } from 'ckeditor5-a11yfirst';
+import {
+    A11yHeadingPlugin,
+    A11yStylesComboPlugin,
+    A11yLinkPlugin,
+    A11yImagePlugin
+} from 'ckeditor5-a11yfirst';
 
-ClassicEditor
-    .create(document.querySelector('#editor'), {
-        plugins: [
-            // ...other plugins
-            A11yFirstPlugin
-        ],
-        toolbar: [
-            // ...other items
-            'a11yFirstAudit'
-        ]
-    })
-    .then(editor => {
-        editor.on('a11yFirst:report', (evt, data) => {
-            console.log('A11y report:', data);
-        });
-    });
+const editor = await ClassicEditor.create(document.querySelector('#editor'), {
+    plugins: [
+        A11yHeadingPlugin,  // a11yheading equivalent
+        A11yLinkPlugin,     // a11ylink equivalent
+        A11yImagePlugin     // a11yimage equivalent
+        // Add A11yStylesComboPlugin if you use htmlSupport paragraphs
+    ]
+});
+```
+
+### Step 4 — Listen for audit results
+
+The plugin emits `a11yFirst:report` each time an audit command runs.
+
+```js
+editor.on('a11yFirst:report', (evt, data) => {
+    if (!data.summary.passed) {
+        console.warn('A11y issues found:', data.issues);
+        // data.issues is an array of { category, code, message }
+        // data.summary = { total, passed }
+        // data.categories = categories that were checked
+    }
+});
+```
+
+### Step 5 — Trigger an audit programmatically (optional)
+
+```js
+// Run all checks
+editor.execute('a11yFirstAudit');
+
+// Run one category only
+editor.execute('a11yImageAudit');
+editor.execute('a11yLinkAudit');
+editor.execute('a11yHeadingAudit');
+editor.execute('a11yStylesComboAudit');
 ```
 
 ## Commands

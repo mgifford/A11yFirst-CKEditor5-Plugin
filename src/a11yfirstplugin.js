@@ -1,73 +1,14 @@
-import { Plugin, Command, ButtonView } from 'ckeditor5';
-import { runA11yAudit } from './audit.js';
+import { Plugin, ButtonView } from 'ckeditor5';
+import { A11yFirstAuditCommand } from './commands.js';
+import { A11yHeadingPlugin } from './a11yheading.js';
+import { A11yStylesComboPlugin } from './a11ystylescombo.js';
+import { A11yLinkPlugin } from './a11ylink.js';
+import { A11yImagePlugin } from './a11yimage.js';
 
-/**
- * Scans editor content for a few common accessibility issues.
- */
-export class A11yFirstAuditCommand extends Command {
-    refresh() {
-        this.isEnabled = true;
-    }
-
-    execute(options = {}) {
-        return runA11yAudit(this.editor, options);
-    }
-}
-
-export class ScopedA11yAuditCommand extends Command {
-    constructor(editor, categories) {
-        super(editor);
-        this._categories = categories;
-    }
-
-    refresh() {
-        this.isEnabled = this.editor.commands.get('a11yFirstAudit').isEnabled;
-    }
-
-    execute() {
-        return this.editor.execute('a11yFirstAudit', { categories: this._categories });
-    }
-}
-
-export class A11yHeadingPlugin extends Plugin {
-    static get pluginName() {
-        return 'A11yHeadingPlugin';
-    }
-
-    init() {
-        this.editor.commands.add('a11yHeadingAudit', new ScopedA11yAuditCommand(this.editor, ['heading']));
-    }
-}
-
-export class A11yStylesComboPlugin extends Plugin {
-    static get pluginName() {
-        return 'A11yStylesComboPlugin';
-    }
-
-    init() {
-        this.editor.commands.add('a11yStylesComboAudit', new ScopedA11yAuditCommand(this.editor, ['stylescombo']));
-    }
-}
-
-export class A11yLinkPlugin extends Plugin {
-    static get pluginName() {
-        return 'A11yLinkPlugin';
-    }
-
-    init() {
-        this.editor.commands.add('a11yLinkAudit', new ScopedA11yAuditCommand(this.editor, ['link']));
-    }
-}
-
-export class A11yImagePlugin extends Plugin {
-    static get pluginName() {
-        return 'A11yImagePlugin';
-    }
-
-    init() {
-        this.editor.commands.add('a11yImageAudit', new ScopedA11yAuditCommand(this.editor, ['image']));
-    }
-}
+export { A11yHeadingPlugin } from './a11yheading.js';
+export { A11yStylesComboPlugin } from './a11ystylescombo.js';
+export { A11yLinkPlugin } from './a11ylink.js';
+export { A11yImagePlugin } from './a11yimage.js';
 
 /**
  * Minimal CKEditor 5 proof-of-concept plugin.
