@@ -25,10 +25,10 @@ export class ScopedA11yAuditCommand extends Command {
     }
 
     refresh() {
-        this.isEnabled = this.editor.commands.get('a11yFirstAudit').isEnabled;
+        this.isEnabled = true;
     }
 
     execute() {
-        return this.editor.execute('a11yFirstAudit', { categories: this._categories });
+        return runA11yAudit(this.editor, { categories: this._categories });
     }
 }

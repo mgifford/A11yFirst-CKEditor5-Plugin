@@ -7,3 +7,6 @@
 - Added scoped commands for legacy plugin continuity: `a11yHeadingAudit`, `a11yStylesComboAudit`, `a11yLinkAudit`, `a11yImageAudit`.
 - Added minimal automated tests for audit execution and payload shape.
 - Added release and ckeditor.com listing templates in `SUBMISSION.md`.
+- Split legacy feature areas into dedicated source files: `a11yheading.js`, `a11ystylescombo.js`, `a11ylink.js`, `a11yimage.js`.
+- Added shared `commands.js` module and made scoped commands independent of umbrella plugin wiring.
+- Added end-to-end publication guide in `PUBLISHING.md`.

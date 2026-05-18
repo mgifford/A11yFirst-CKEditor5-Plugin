@@ -29,7 +29,7 @@ test/
   audit.test.js       # Automated tests
 ```
 
-Other files: `package.json`, `CHANGELOG.md`, `LICENSE`, `SUBMISSION.md`.
+Other files: `package.json`, `CHANGELOG.md`, `LICENSE`, `SUBMISSION.md`, `PUBLISHING.md`.
 
 No demo site is included.
 
@@ -249,3 +249,5 @@ git push origin main --tags
 ## Submission copy templates
 
 Release notes and ckeditor.com listing draft text are included in `SUBMISSION.md`.
+
+Detailed npm publication and CKEditor submission workflow is documented in `PUBLISHING.md`.
